@@ -1,6 +1,8 @@
 <section id="welcome">
         <h1>Welcome to CSE Motors!</h1>
+        <% if (typeof messages === 'function') { %>
         <%- messages() %>
+        <% } %>
         <div id="delorean">
             <img src="./images/vehicles//delorean.jpg" alt="DMC Delorean" class="delorean-img">
             <div class="delorean-description">
