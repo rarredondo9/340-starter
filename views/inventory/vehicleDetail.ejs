@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <main>
+    <div class="vehicle-details-container">
+        <div class="vehicle-images">
+            <img src="<%= vehicleDetails.image %>" alt="Image of <%= vehicleDetails.make %> <%= vehicleDetails.model %>" class="main-image">
+        </div>
+        <div class="vehicle-info">
+            <h2><%= vehicleDetails.make %> <%= vehicleDetails.model %> (<%= vehicleDetails.year %>)</h2>
+            <p><strong>Price:</strong> $<%= vehicleDetails.price %></p>
+            <p><strong>Mileage:</strong> <%= vehicleDetails.miles %> miles</p>
+            <p><strong>Color:</strong> <%= vehicleDetails.color %></p>
+            <p><strong>Description:</strong> <%= vehicleDetails.description %></p>
+        </div>
+        <div class="vehicle-pricing">
+            <h3>No-Haggle Price: $<%= vehicleDetails.price %></h3>
+            <button class="btn">Start My Purchase</button>
+        </div>
+    </div>
+  </main>
+  <footer>
+    <p><a href="/inv/testError">Trigger Error</a></p>
+  </footer>
+</body>
+</html>
