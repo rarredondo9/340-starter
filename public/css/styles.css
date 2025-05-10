@@ -1,6 +1,331 @@
-/******* Change Box Model ***************/
 *,
 *:before,
 *:after {
   box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background-color: #fff;
+}
+
+#wrapper {
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 1em;
+  background-color: #fff;
+}
+
+h1, h2, h3 {
+  margin: 1em 0 0.5em;
+  color: #333;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+a {
+  text-decoration: none;
+  color: #01b0d3;
+}
+
+a:hover {
+  color: #000;
+}
+
+button {
+  background-color: #333;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #000;
+}
+
+#top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  padding: 10px;
+  color: white;
+}
+
+#top-header .siteName a {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+#top-header a:hover {
+  color: #01b0d3;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  background-color: #333;
+  color: #fff;
+}
+
+nav ul li {
+  margin: 0 20px;
+}
+
+nav ul li a {
+  color: white;
+  font-size: 18px;
+}
+
+nav ul li a:hover {
+  color: #01b0d3;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+  background-color: #f9f9f9;
+  margin-top: 20px;
+  color: #333;
+}
+
+#footer-container {
+  padding: 20px;
+}
+
+/******* Main ********/
+
+#delorean {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  color: #01b0d3;
+}
+
+#delorean h2 {
+  color: #01b0d3;
+}
+
+#delorean img {
+  width: 700px;
+  height: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.delorean-description {
+  position: absolute;
+  top: 20px;
+  left: 20%;
+  transform: translateX(-50%);
+  padding: 15px;
+  width: 250px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333; 
+  border-radius: 8px;
+  z-index: 2;
+  text-align: center;
+}
+
+.delorean-description ul {
+  list-style: none;
+  padding: 0;
+}
+
+.button-own {
+  display: inline-block;
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.button-own:hover {
+  background-color: #000;
+}
+
+/******* Reviews and Upgrades ********/
+#reviews-updates {
+  display: flex;
+  flex-direction: column;
+}
+
+#reviews {
+  margin-bottom: 20px;
+}
+
+#upgrades {
+  text-align: center;
+}
+
+.upgrade-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 10px;
+  justify-items: center;
+  color: #333; 
+}
+
+.upgrade-img {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upgrade-img img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-bottom: 5px;
+}
+
+.upgrade-img p {
+  margin-top: 5px;
+}
+
+/******* Vehicle Details ********/
+
+.vehicle-details-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px; 
+  margin: 20px 0;
+}
+
+.vehicle-images {
+  flex: 1 1 40%; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.vehicle-images img {
+  max-width: 100%; 
+  height: auto;
+  border-radius: 10px; 
+}
+
+.vehicle-info {
+  flex: 1 1 50%; 
+  margin-left: 20px;
+}
+
+.vehicle-pricing {
+  margin-top: 20px;
+}
+
+.vehicle-pricing h3 {
+  margin-bottom: 15px;
+}
+
+.btn {
+  background-color: #01242b;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 10px 0;
+}
+
+.btn:hover {
+  background-color: #0193b3;
+}
+footer a {
+  color: #000;   
+  text-decoration: none;  
+  font-weight: bold;        
+}
+
+@media only screen and (min-width: 768px) {
+  body {
+    background-image: linear-gradient(45deg, #000 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #000 75%),
+    linear-gradient(45deg, transparent 75%, #000 75%),
+    linear-gradient(45deg, #000 25%, #fff 25%);
+    background-size: 100px 100px;
+    background-position: 0 0, 0 0, -50px -50px, 50px 50px;
+  }
+
+  #wrapper {
+    border: 5px solid #01b0d3;
+    border-radius: 10px;
+    margin-top: 1rem;
+    padding: 1vw;
+    width: 75vw;
+    max-width: 1200px;
+  }
+
+  #delorean {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .delorean-description {
+    text-align: left;
+    margin-left: 20px;
+  }
+
+  #reviews-updates {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  #reviews, #upgrades {
+    width: 48%;
+  }
+
+  #upgrades {
+    order: 1; 
+  }
+
+  #reviews {
+    order: 2; 
+  }
+
+  .upgrade-grid {
+    grid-template-columns: repeat(4, 1fr); 
+  }
+
+  .upgrade-grid .upgrade-img:nth-child(1) { order: 1; } 
+  .upgrade-grid .upgrade-img:nth-child(2) { order: 2; } 
+  .upgrade-grid .upgrade-img:nth-child(3) { order: 3; } 
+  .upgrade-grid .upgrade-img:nth-child(4) { order: 4; } 
+  .upgrade-grid .upgrade-img:nth-child(5) { order: 5; } 
+  .upgrade-grid .upgrade-img:nth-child(6) { order: 6; } 
+}
+.upgrade-img img {
+  width: 70px;
+  height: 70px;
+}
+
+/******* Reviews and Upgrades Media Query********/
+.vehicle-details-container {
+  flex-direction: column; 
+  align-items: center;
+}
+
+.vehicle-info {
+  margin-left: 0;
+  text-align: center;
+}
+
+.vehicle-pricing {
+  text-align: center;
 }
