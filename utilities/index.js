@@ -71,8 +71,5 @@ Util.handleError = (err, req, res, next) => {
   });
 };
 
-// Route to build inventory by classification view
-router.get("/type/:classificationId", invController.buildByClassificationId);
 
-module.exports = router;
 module.exports = Util;
