@@ -84,6 +84,6 @@ const host = process.env.HOST || "localhost"
  * Start Server
  *************************/
 app.listen(port, () => {
-  console.log(`App listening on http://${host}:${port}`)
+  console.log(`App listening on ${port}`)
 })
 
