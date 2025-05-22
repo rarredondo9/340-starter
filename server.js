@@ -15,6 +15,8 @@ const flash = require("connect-flash")
 const app = express()
 const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
+const inventoryRoute = require("./routes/inventoryRoute")
+
 
 /* ***********************
  * View Engine Templates
@@ -51,6 +53,8 @@ app.use((req, res, next) => {
  * Routes
  *************************/
 app.use(static)
+// Inventory routes
+app.use("/inv", inventoryRoute)
 
 /* ***********************
  * Index Route
@@ -82,3 +86,4 @@ const host = process.env.HOST || "localhost"
 app.listen(port, () => {
   console.log(`App listening on http://${host}:${port}`)
 })
+
