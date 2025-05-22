@@ -58,18 +58,12 @@ Util.buildClassificationGrid = async function(data){
   return grid
 }
 
-/* **************************************
- * Error handling middleware function
- ************************************ */
-Util.handleError = (err, req, res, next) => {
-  console.error(err.stack);
-  res.status(err.status || 500);
-  res.render("error", {
-    title: "Server Error",
-    message: err.message,
-    error: err,
-  });
-};
+/* ****************************************
+ * Middleware For Handling Errors
+ * Wrap other function in this for 
+ * General Error Handling
+ **************************************** */
+Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
 
 
 module.exports = Util;
