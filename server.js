@@ -70,14 +70,26 @@ app.get("/", utilities.handleErrors(baseController.buildHome))
 * Place after all other middleware
 *************************/
 app.use(async (err, req, res, next) => {
-  let nav = await utilities.getNav()
-  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
-  res.render("errors/error", {
+  let nav = '';
+  try {
+    nav = await utilities.getNav();
+  } catch (e) {
+    console.error("Error building nav in error handler:", e);
+  }
+
+  console.error(`Error at: "${req.originalUrl}": ${err.message}`);
+
+  const message = err.status === 404
+    ? err.message
+    : "Oh no! There was a crash. Maybe try a different route?";
+
+  res.status(err.status || 500).render("errors/error", {
     title: err.status || 'Server Error',
-    message: err.message,
-    nav
-  })
-})
+    message,
+    nav,
+  });
+});
+
 
 /* ***********************
  * Local Server Information
