@@ -55,15 +55,14 @@ app.use((req, res, next) => {
 app.use(static)
 // Inventory routes
 app.use("/inv", inventoryRoute)
+
+// Index Route - must be before 404 catch-all
+app.get("/", utilities.handleErrors(baseController.buildHome))
+
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
   next({status: 404, message: 'Sorry, we appear to have lost that page.'})
 })
-
-/* ***********************
- * Index Route
- *************************/
-app.get("/", utilities.handleErrors(baseController.buildHome))
 
 /* ***********************
 * Express Error Handler
@@ -79,17 +78,17 @@ app.use(async (err, req, res, next) => {
 
   console.error(`Error at: "${req.originalUrl}": ${err.message}`);
 
-  const message = err.status === 404
-    ? err.message
-    : "Oh no! There was a crash. Maybe try a different route?";
+  const status = err.status || 500;
+  const message = err.message || "Internal Server Error";
 
-  res.status(err.status || 500).render("errors/error", {
-    title: err.status || 'Server Error',
+  const view = status === 404 ? "errors/404" : "errors/500";
+
+  res.status(status).render(view, {
+    title: status,
     message,
     nav,
   });
 });
-
 
 /* ***********************
  * Local Server Information
@@ -103,4 +102,3 @@ const host = process.env.HOST || "localhost"
 app.listen(port, () => {
   console.log(`App listening on ${port}`)
 })
-

@@ -1,23 +1,23 @@
-const invModel = require("../models/inventory-model")
-const utilities = require("../utilities/")
+const invModel = require("../models/inventory-model");
+const utilities = require("../utilities/");
 
-const invCont = {}
+const invCont = {};
 
 /* ***************************
  *  Build inventory by classification view
  * ************************** */
 invCont.buildByClassificationId = async function (req, res, next) {
-  const classification_id = req.params.classificationId
-  const data = await invModel.getInventoryByClassificationId(classification_id)
-  const grid = await utilities.buildClassificationGrid(data)
-  let nav = await utilities.getNav()
-  const className = data[0].classification_name
+  const classification_id = req.params.classificationId;
+  const data = await invModel.getInventoryByClassificationId(classification_id);
+  const grid = await utilities.buildClassificationGrid(data);
+  let nav = await utilities.getNav();
+  const className = data[0].classification_name;
   res.render("./inventory/classification", {
     title: className + " vehicles",
     nav,
     grid,
-  })
-}
+  });
+};
 
 /* **************************
  * Build single vehicle view
@@ -33,7 +33,6 @@ invCont.buildVehicleDetail = async function (req, res, next) {
     }
     const nav = await utilities.getNav();
 
-    // Construct the HTML for the vehicle details directly here
     const vehicleDetails = {
       make: vehicle.inv_make,
       model: vehicle.inv_model,
@@ -45,10 +44,10 @@ invCont.buildVehicleDetail = async function (req, res, next) {
       description: vehicle.inv_description,
     };
 
-    res.render("./inventory/vehicleDetail.ejs", { 
-      title: `${vehicleDetails.make} ${vehicleDetails.model}`, 
-      nav, 
-      vehicleDetails // Pass the details object instead
+    res.render("./inventory/vehicleDetail", {
+      title: `${vehicleDetails.make} ${vehicleDetails.model}`,
+      nav,
+      vehicleDetails
     });
   } catch (error) {
     next(error);
@@ -64,5 +63,5 @@ invCont.testError = (req, res, next) => {
   next(err);
 };
 
-
 module.exports = invCont;
+
