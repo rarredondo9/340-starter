@@ -4,6 +4,27 @@
   <meta charset="UTF-8" />
   <title><%= title %></title>
   <link rel="stylesheet" href="/public/css/styles.css" />
+  <style>
+    .password-rules {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 0.5em;
+    }
+
+    input:required:invalid, input:focus:invalid {
+      border-color: red;
+      background-image: url('/images/invalid.png');
+      background-position: right top;
+      background-repeat: no-repeat;
+    }
+
+    input:required:valid {
+      border-color: green;
+      background-image: url('/images/valid.png');
+      background-position: right top;
+      background-repeat: no-repeat;
+    }
+  </style>
 </head>
 <body>
 
@@ -12,6 +33,13 @@
 
     <!-- Flash message -->
     <%- messages('notice') %>
+    <% if (errors) { %>
+  <ul class="notice">
+ <% errors.array().forEach(error => { %>
+   <li><%= error.msg %></li>
+<%  }) %>
+ </ul>
+<% } %>
 
     <form action="/account/register" method="post">
       <label for="account_firstname">First Name</label>
@@ -24,13 +52,17 @@
 
       <label for="account_email">Email</label>
       <input type="email" id="account_email" name="account_email" required
+             placeholder="Enter a valid email address"
              value="<%= typeof account_email != 'undefined' ? account_email : '' %>" />
 
       <label for="account_password">Password</label>
+      <div class="password-rules">
+        Passwords must be at least 12 characters and contain at least 1 number, 1 capital letter, and 1 special character.
+      </div>
       <div class="password-toggle">
         <input type="password" id="account_password" name="account_password" required
-               pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}$"
-               title="Password must be at least 12 characters long, include 1 uppercase letter, 1 number, and 1 special character." />
+               pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
+               title="Must be at least 12 characters with 1 uppercase, 1 number, and 1 special character." />
         <button type="button" onclick="togglePassword()">Show</button>
       </div>
 
