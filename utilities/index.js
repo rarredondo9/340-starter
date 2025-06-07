@@ -83,5 +83,19 @@ Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)
       </div>
     `;
   }
+/* ********************************
+* Dropdown list for  Classification
+* ********************************* */
+
+  Util.buildClassificationList = async (classification_id = null) => {
+  const data = await invModel.getClassifications();
+  let list = '<select name="classification_id" id="classificationList" required>';
+  list += '<option value="">Choose a Classification</option>';
+  data.rows.forEach(row => {
+    list += `<option value="${row.classification_id}"${row.classification_id == classification_id ? ' selected' : ''}>${row.classification_name}</option>`;
+  });
+  list += "</select>";
+  return list;
+};
 
 module.exports = Util;
