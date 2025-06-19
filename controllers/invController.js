@@ -1,5 +1,6 @@
 const invModel = require("../models/inventory-model");
 const utilities = require("../utilities/");
+const { getReviewsByVehicleId } = require("../models/review-model") // 👈 Import review model
 
 const invCont = {};
 
@@ -25,16 +26,17 @@ invCont.buildByClassificationId = async function (req, res, next) {
 /* Build single vehicle view */
 invCont.buildVehicleDetail = async function (req, res, next) {
   try {
-    const inv_id = req.params.invId;
-    const vehicle = await invModel.getVehicleById(inv_id);
+    const inv_id = req.params.invId
+    const vehicle = await invModel.getVehicleById(inv_id)
     if (!vehicle) {
-      const error = new Error("Vehicle not found");
-      error.status = 404;
-      return next(error);
+      const error = new Error("Vehicle not found")
+      error.status = 404
+      return next(error)
     }
-    const nav = await utilities.getNav();
+    const nav = await utilities.getNav()
 
     const vehicleDetails = {
+      inv_id,
       make: vehicle.inv_make,
       model: vehicle.inv_model,
       year: vehicle.inv_year,
@@ -43,17 +45,26 @@ invCont.buildVehicleDetail = async function (req, res, next) {
       miles: vehicle.inv_miles.toLocaleString(),
       color: vehicle.inv_color,
       description: vehicle.inv_description,
-    };
+    }
+
+    const vehicleReviews = await getReviewsByVehicleId(inv_id) // 👈 Fetch reviews
 
     res.render("./inventory/vehicleDetail", {
       title: `${vehicleDetails.make} ${vehicleDetails.model}`,
       nav,
       vehicleDetails,
-    });
+      vehicle,
+      vehicleReviews,
+      loggedin: res.locals.loggedin,
+      messages: {
+        success: req.flash("success"),
+        error: req.flash("error"),
+      },
+    })
   } catch (error) {
-    next(error);
+    next(error)
   }
-};
+}
 
 /* Intentional test error */
 invCont.testError = (req, res, next) => {

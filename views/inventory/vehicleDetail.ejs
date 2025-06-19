@@ -24,6 +24,46 @@
         <h3>No-Haggle Price: $<%= vehicleDetails.price %></h3>
         <button class="btn">Start My Purchase</button>
       </div>
+
+      <section class="vehicle-reviews">
+        <h2>Customer Reviews</h2>
+
+        <!-- Flash messages -->
+        <% if (messages && messages.success.length > 0) { %>
+          <div class="flash success"><%= messages.success[0] %></div>
+        <% } %>
+        <% if (messages && messages.error.length > 0) { %>
+          <div class="flash error"><%= messages.error[0] %></div>
+        <% } %>
+
+        <% if (vehicleReviews && vehicleReviews.length > 0) { %>
+          <ul>
+            <% vehicleReviews.forEach(review => { %>
+              <li>
+                <strong><%= review.account_firstname %></strong>
+                (<%= new Date(review.review_date).toLocaleDateString() %>)<br/>
+                <%= review.review_text %>
+              </li>
+            <% }) %>
+          </ul>
+        <% } else { %>
+          <p>No reviews yet. Be the first to leave one!</p>
+        <% } %>
+      </section>
+
+      <% if (loggedin) { %>
+        <section class="review-form">
+          <h3>Leave a Review</h3>
+          <form action="/reviews/add" method="post">
+            <input type="hidden" name="inv_id" value="<%= vehicleDetails.inv_id %>">
+            <textarea name="review_text" rows="4" placeholder="Write your review..." required></textarea>
+            <button type="submit">Submit Review</button>
+          </form>
+        </section>
+      <% } else { %>
+        <p><a href="/account/login">Log in</a> to leave a review.</p>
+      <% } %>
+
     </div>
   </main>
   <footer>

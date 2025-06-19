@@ -20,9 +20,10 @@ const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
 const inventoryRoute = require("./routes/inventoryRoute")
 const accountRoute = require("./routes/accountRoute") 
+const reviewRoute = require("./routes/reviewRoute") // 👈 Added reviewRoute
 const utilities = require("./utilities")
-
 const app = express()
+
 
 /* ************************
  * Session Middleware
@@ -59,6 +60,7 @@ app.use((req, res, next) => {
  ************************ */
 app.use((req, res, next) => {
   res.locals.session = req.session
+  res.locals.loggedin = req.session.loggedin || false
   next()
 })
 
@@ -93,6 +95,7 @@ app.set("layout", "./layouts/layout")
 app.use(static)
 app.use("/inv", inventoryRoute)
 app.use("/account", accountRoute)
+app.use("/reviews", reviewRoute) // 👈 Added review route
 app.get("/", utilities.handleErrors(baseController.buildHome))
 
 /* ***********************
