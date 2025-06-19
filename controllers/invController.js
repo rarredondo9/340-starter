@@ -69,9 +69,14 @@ invCont.testError = (req, res, next) => {
 invCont.buildManagementView = async function (req, res, next) {
   try {
     const nav = await utilities.getNav();
+    const classificationSelect = await utilities.buildClassificationList();
+    const inventory = await invModel.getAllInventory(); // ⬅️ make sure this exists in your model
+
     res.render("./inventory/management", {
       title: "Inventory Management",
       nav,
+      classificationSelect,
+      inventory,
       messages: {
         success: req.flash("success"),
         error: req.flash("error"),
@@ -81,6 +86,7 @@ invCont.buildManagementView = async function (req, res, next) {
     next(error);
   }
 };
+
 
 /* **************************
  * Build add classification view
@@ -108,7 +114,6 @@ invCont.addClassification = async (req, res) => {
     res.redirect("/inv/add-classification");
   }
 };
-
 
 /* **************************
  * Build add inventory view
@@ -140,7 +145,47 @@ invCont.addInventory = async (req, res) => {
   }
 };
 
+/* ***************************
+ * Build Delete Confirmation View
+ * *************************** */
+invCont.buildDeleteInventoryView = async function (req, res, next) {
+  try {
+    const inv_id = parseInt(req.params.invId);
+    const data = await invModel.getInventoryById(inv_id);
+    const nav = await utilities.getNav();
 
+    const item = data[0];
+    const name = `${item.inv_make} ${item.inv_model}`;
+
+    res.render("inventory/delete-confirm", {
+      title: `Delete ${name}`,
+      nav,
+      item,
+      errors: null
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/* ***************************
+ * Delete Inventory Item
+ * *************************** */
+invCont.deleteInventoryItem = async function (req, res, next) {
+  try {
+    const inv_id = parseInt(req.body.inv_id);
+    const result = await invModel.deleteInventoryItem(inv_id);
+
+    if (result.rowCount > 0) {
+      req.flash("notice", "The item was successfully deleted.");
+      res.redirect("/inv/");
+    } else {
+      req.flash("error", "Delete failed. Try again.");
+      res.redirect(`/inv/delete/${inv_id}`);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = invCont;
-

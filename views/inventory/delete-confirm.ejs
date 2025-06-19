@@ -1,0 +1,23 @@
+<% include ../includes/header.ejs %>
+<main>
+  <h1>Delete <%= item.make %> <%= item.model %></h1>
+  <p>Confirm Deletion - This action is permanent.</p>
+
+  <form action="/inv/delete" method="post">
+    <label for="inv_make">Make</label>
+    <input type="text" id="inv_make" name="inv_make" value="<%= item.make %>" readonly>
+
+    <label for="inv_model">Model</label>
+    <input type="text" id="inv_model" name="inv_model" value="<%= item.model %>" readonly>
+
+    <label for="inv_year">Year</label>
+    <input type="text" id="inv_year" name="inv_year" value="<%= item.year %>" readonly>
+
+    <label for="inv_price">Price</label>
+    <input type="text" id="inv_price" name="inv_price" value="<%= item.price %>" readonly>
+
+    <input type="hidden" name="inv_id" value="<%= item.inv_id %>">
+    <input type="submit" value="Delete">
+  </form>
+</main>
+<% include ../includes/footer.ejs %>

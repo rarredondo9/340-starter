@@ -12,6 +12,8 @@ require("dotenv").config()
 const session = require("express-session")
 const flash = require("connect-flash")
 const pgSession = require("connect-pg-simple")(session)
+const cookieParser = require("cookie-parser")
+const jwt = require("jsonwebtoken")
 
 const pool = require("./database/")
 const static = require("./routes/static")
@@ -40,7 +42,8 @@ app.use(session({
  * Body Parsing Middleware
  ************************ */
 app.use(express.json())
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true })) 
+app.use(cookieParser())
 
 /* ***********************
  * Flash Message Middleware
@@ -48,6 +51,32 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 app.use(flash())
 app.use((req, res, next) => {
   res.locals.messages = require("express-messages")(req, res)
+  next()
+})
+ 
+/* ***********************
+ * Session exposed to views
+ ************************ */
+app.use((req, res, next) => {
+  res.locals.session = req.session
+  next()
+})
+
+/* ***********************
+ * JWT Middleware
+ ************************ */
+app.use((req, res, next) => {
+  const token = req.cookies.jwt
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || "jwt_secret")
+      res.locals.accountData = decoded
+    } catch (err) {
+      res.locals.accountData = null
+    }
+  } else {
+    res.locals.accountData = null
+  }
   next()
 })
 
@@ -101,4 +130,3 @@ const port = process.env.PORT || 3000
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
 })
-

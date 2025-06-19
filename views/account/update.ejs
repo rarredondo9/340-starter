@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header>
+    <h1><%= title %></h1>
+  </header>
+
+  <main>
+    <% if (messages?.error && messages.error.length > 0) { %>
+      <div class="error-messages">
+        <% messages.error.forEach(function(err) { %>
+          <p><%= err %></p>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <% if (messages?.success && messages.success.length > 0) { %>
+      <div class="success-messages">
+        <% messages.success.forEach(function(msg) { %>
+          <p><%= msg %></p>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <!-- Account Update Form -->
+    <form action="/account/update-profile" method="POST" novalidate>
+      <fieldset>
+        <legend>Account Update</legend>
+
+        <input type="hidden" name="account_id" value="<%= account.account_id %>" />
+
+        <label for="account_firstname">First Name</label>
+        <input 
+          type="text" 
+          id="account_firstname" 
+          name="account_firstname" 
+          required 
+          minlength="2"
+          value="<%= typeof formData !== 'undefined' ? formData.account_firstname : account.account_firstname %>"
+        />
+
+        <label for="account_lastname">Last Name</label>
+        <input 
+          type="text" 
+          id="account_lastname" 
+          name="account_lastname" 
+          required 
+          minlength="2"
+          value="<%= typeof formData !== 'undefined' ? formData.account_lastname : account.account_lastname %>"
+        />
+
+        <label for="account_email">Email Address</label>
+        <input 
+          type="email" 
+          id="account_email" 
+          name="account_email" 
+          required 
+          value="<%= typeof formData !== 'undefined' ? formData.account_email : account.account_email %>"
+        />
+
+        <button type="submit">Update Account</button>
+      </fieldset>
+    </form>
+
+    <!-- Change Password Form -->
+    <form action="/account/update-password" method="POST" novalidate>
+      <fieldset>
+        <legend>Change Password</legend>
+
+        <input type="hidden" name="account_id" value="<%= account.account_id %>" />
+
+        <label for="new_password">New Password</label>
+        <input 
+          type="password" 
+          id="new_password" 
+          name="new_password" 
+          required 
+          minlength="8"
+          pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$"
+          aria-describedby="passwordHelp"
+        />
+        <small id="passwordHelp">
+          Password must be at least 8 characters, include 1 uppercase letter, 1 number, and 1 special character.
+        </small>
+
+        <button type="submit">Change Password</button>
+      </fieldset>
+    </form>
+  </main>
+</body>
+</html>

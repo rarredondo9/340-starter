@@ -98,4 +98,34 @@ Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)
   return list;
 };
 
+/* ******************************************
+ * Middleware to check if user is logged in
+ ********************************************* */
+const jwt = require("jsonwebtoken")
+
+function checkAccountType(req, res, next) {
+  const token = req.cookies.jwt
+
+  if (!token) {
+    req.flash("notice", "Please log in to access this page.")
+    return res.redirect("/account/login")
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    if (decoded.account_type === "Employee" || decoded.account_type === "Admin") {
+      req.accountData = decoded
+      return next()
+    } else {
+      req.flash("notice", "You do not have permission to access this area.")
+      return res.redirect("/account/login")
+    }
+  } catch (err) {
+    req.flash("notice", "Session expired or invalid. Please log in again.")
+    return res.redirect("/account/login")
+  }
+}
+
+
+Util.checkAccountType = checkAccountType;
 module.exports = Util;
