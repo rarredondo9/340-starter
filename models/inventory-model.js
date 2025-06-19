@@ -26,8 +26,8 @@ async function getInventoryByClassificationId(classification_id) {
 }
 
 /* ********************
-* Retrieve single vehicle data
-***************************** */
+ * Retrieve single vehicle data
+ ***************************** */
 async function getVehicleById(inv_id) {
   try {
     const result = await pool.query(
@@ -38,6 +38,24 @@ async function getVehicleById(inv_id) {
   } catch (error) {
     console.error("getVehicleById error " + error);
     throw error;
+  }
+}
+
+/* ***************************
+ * Get all inventory items
+ * *************************** */
+async function getAllInventory() {
+  try {
+    const data = await pool.query(
+      `SELECT i.inv_id, i.inv_make, i.inv_model, c.classification_name 
+       FROM public.inventory AS i 
+       JOIN public.classification AS c 
+       ON i.classification_id = c.classification_id
+       ORDER BY c.classification_name, i.inv_make`
+    );
+    return data.rows;
+  } catch (error) {
+    throw new Error("getAllInventory error: " + error.message);
   }
 }
 
@@ -54,10 +72,25 @@ async function deleteInventoryItem(inv_id) {
   }
 }
 
+/* ***************************
+ * Add a new classification
+ * *************************** */
+async function addClassification(classification_name) {
+  try {
+    const sql = "INSERT INTO classification (classification_name) VALUES ($1)";
+    return await pool.query(sql, [classification_name]);
+  } catch (error) {
+    throw new Error("addClassification error: " + error.message);
+  }
+}
+
+
 
 module.exports = {
   getClassifications,
   getInventoryByClassificationId,
   getVehicleById,
   deleteInventoryItem,
+  getAllInventory,
+  addClassification,
 };

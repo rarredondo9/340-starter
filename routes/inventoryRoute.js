@@ -1,89 +1,37 @@
-// Needed Resources 
 const express = require("express");
-const router = new express.Router();
-const invController = require("../controllers/invController");
-const invValidate = require("../utilities/inventory-validation");
+const router = express.Router();
 const utilities = require("../utilities");
+const invController = require("../controllers/invController");
 
-const { checkLogin, checkAccountType } = utilities;
+// Inventory home page
+router.get("/", utilities.handleErrors(invController.buildManagementView));
 
-// Route to build inventory by classification view (open to all)
-router.get("/type/:classificationId", utilities.handleErrors(invController.buildByClassificationId));
-
-// Route to single vehicle view (open to all)
-router.get("/detail/:invId", utilities.handleErrors(invController.buildVehicleDetail));
-
-// Route to trigger a 500 error intentionally (for testing)
-router.get("/testError", utilities.handleErrors(invController.testError));
-
-// Route to launch inventory management (Admin/Employee only)
+// Inventory by classification
 router.get(
-  "/",
-  checkLogin,
-  checkAccountType,
-  utilities.handleErrors(invController.buildManagementView)
+  "/type/:classificationId",
+  utilities.handleErrors(invController.buildByClassificationId)
 );
 
-// Route to add classification view (Admin/Employee only)
+// Vehicle detail page
 router.get(
-  "/add-classification",
-  checkLogin,
-  checkAccountType,
-  utilities.handleErrors(invController.buildAddClassificationView)
-);
-router.post(
-  "/add-classification",
-  checkLogin,
-  checkAccountType,
-  invValidate.classificationRules(),
-  invValidate.checkClassificationData,
-  utilities.handleErrors(invController.addClassification)
+  "/detail/:invId",
+  utilities.handleErrors(invController.buildVehicleDetail)
 );
 
-// Route to add inventory view (Admin/Employee only)
-router.get(
-  "/add-inventory",
-  checkLogin,
-  checkAccountType,
-  utilities.handleErrors(invController.buildAddInventoryView)
-);
-router.post(
-  "/add-inventory",
-  checkLogin,
-  checkAccountType,
-  invValidate.inventoryRules(),
-  invValidate.checkInventoryData,
-  utilities.handleErrors(invController.addInventory)
-);
+// Add classification form
+router.get("/add-classification", invController.buildAddClassificationView);
+router.post("/add-classification", utilities.handleErrors(invController.addClassification));
 
-// Route to show delete confirmation (Admin/Employee only)
-router.get(
-  "/delete/:invId",
-  checkLogin,
-  checkAccountType,
-  utilities.handleErrors(invController.buildDeleteInventoryView)
-);
-router.post(
-  "/delete",
-  checkLogin,
-  checkAccountType,
-  utilities.handleErrors(invController.deleteInventoryItem)
-);
+// Add inventory form
+router.get("/add-inventory", utilities.checkAccountType, invController.buildAddInventoryView);
+router.post("/add-inventory", utilities.handleErrors(invController.addInventory));
 
-// edit/update inventory routes
-router.get(
-  "/edit/:invId",
-  checkLogin,
-  checkAccountType,
-  utilities.handleErrors(invController.buildEditInventoryView)
-);
-router.post(
-  "/update",
-  checkLogin,
-  checkAccountType,
-  invValidate.inventoryRules(),
-  invValidate.checkInventoryData,
-  utilities.handleErrors(invController.updateInventory)
-);
+// Edit inventory form
+router.get("/edit/:invId", utilities.checkAccountType, utilities.handleErrors(invController.buildEditInventoryView));
+router.post("/edit/:invId", utilities.handleErrors(invController.updateInventoryItem));
+
+// Delete inventory form
+router.get("/delete/:invId", utilities.checkAccountType, utilities.handleErrors(invController.buildDeleteInventoryView));
+router.post("/delete", utilities.handleErrors(invController.deleteInventoryItem));
 
 module.exports = router;
